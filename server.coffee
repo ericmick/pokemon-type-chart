@@ -16,13 +16,18 @@ app.use assets()
 app.use express.favicon 'assets/img/favicon.ico'
 app.get '/all', (req, res) ->
     res.render 'chart', types('.*')
+app.get '/types', (req, res) ->
+    res.render 'chart', types '', '.*', true
 app.get '/type/:type', (req, res) ->
-    res.render 'chart', types('', req.route.params.type)
+    console.log 'finding type', req.param('type')?.toLowerCase()
+    res.render 'chart', types '', req.param('type')?.toLowerCase()
 app.get '/:name', (req, res) ->
-    console.log 'finding', req.route.params.name
-    res.render 'chart', types(req.route.params.name.toLowerCase())
-app.get '*', (req, res) ->
-    res.render 'chart', types()
-app.use express.static __dirname + '/public'
-app.listen 80
-console.log 'listening: port 80'
+    console.log 'finding', req.param('name')?.toLowerCase(), req.param('type')?.toLowerCase()
+    res.render 'chart', types(req.param('name')?.toLowerCase(), req.param('type')?.toLowerCase())
+app.get '/', (req, res) ->
+    console.log 'finding', req.param('name')?.toLowerCase(), req.param('type')?.toLowerCase()
+    res.render 'chart', types(req.param('name')?.toLowerCase(), req.param('type')?.toLowerCase())
+app.use '/img', express.static __dirname + '/assets/img'
+port = process.env.PORT || 80
+app.listen port
+console.log 'listening on port ' + port

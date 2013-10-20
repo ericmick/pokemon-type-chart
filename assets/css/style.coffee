@@ -1,12 +1,48 @@
+types = require './../../data/types.json'
+
 borderRadius = (radius) ->
     WebkitBorderRadius: radius
     MozBorderRadius: radius
     borderRadius: radius
 
-module.exports =
+smallFont =
+    fontFamily: "Tahoma, Geneva, sans-serif"
+    fontSize: '9px'
+    fontWeight: '300'
+
+style =
     body:
         backgroundColor: '#FFF'
         color: '#333'
+        mixin: smallFont
+    h1:
+        display: 'inline'
+        mixin: smallFont
+    'a.help':
+        marginLeft: '1em'
+        position: 'relative'
+        cursor: 'help'
+        'div.help':
+            display: 'none'
+            position: 'absolute'
+            marginLeft: '1em'
+            backgroundColor: '#FFF'
+            border: '1px solid #666'
+            padding: '1em'
+            fontSize: '10px'
+            width: '40em'
+            div:
+                padding: '1em'
+    'a.help:hover div':
+        display: 'block'
+    'div.controls':
+        float: 'right'
+    '.controls form':
+        display: 'inline'
+    '.controls input':
+        mixin: smallFont
+    '.controls button':
+        mixin: smallFont
     'table#guide':
         position: 'absolute'
         backgroundColor: '#FFF'
@@ -26,48 +62,12 @@ module.exports =
             fontWeight: '300'
             width: '35px'
             div:
-                border: '1px solid #666'
+                border: '1px solid #333'
                 padding: '2px'
                 margin: '2px 0'
                 color: '#FFF'
-                textShadow: '1px 1px #000'
+                textShadow: '1px 1px 3px #000'
                 mixin: borderRadius '6px'
-            'div.normal':
-                backgroundColor: '#A8A878'
-            'div.fighting':
-                backgroundColor: '#C03028'
-            'div.flying':
-                backgroundColor: '#A890F0'
-            'div.poison':
-                backgroundColor: '#A040A0'
-            'div.ground':
-                backgroundColor: '#E0C068'
-            'div.rock':
-                backgroundColor: '#B8A038'
-            'div.bug':
-                backgroundColor: '#A8B820'
-            'div.ghost':
-                backgroundColor: '#705898'
-            'div.steel':
-                backgroundColor: '#B8B8D0'
-            'div.fire':
-                backgroundColor: '#F08030'
-            'div.water':
-                backgroundColor: '#6890F0'
-            'div.grass':
-                backgroundColor: '#78C850'
-            'div.electric':
-                backgroundColor: '#F8D030'
-            'div.psychic':
-                backgroundColor: '#F85888'
-            'div.ice':
-                backgroundColor: '#98D8D8'
-            'div.dragon':
-                backgroundColor: '#7038F8'
-            'div.dark':
-                backgroundColor: '#705848'
-            'div.fairy':
-                backgroundColor: '#EE99AC'
         'th.corner':
             padding: 0
         td:
@@ -75,6 +75,7 @@ module.exports =
             fontSize: '10px'
             border: '1px solid #DDD'
             width: '32px'
+            cursor: 'default'
         'td.eff4':
             backgroundColor: '#EE1'
             color: '#553'
@@ -93,3 +94,15 @@ module.exports =
         'td.eff0':
             backgroundColor: '#000'
             color: '#DDD'
+        'th.spacer':
+            width: '1px'
+        'td.spacer':
+            width: '1px'
+            backgroundColor: '#DDD'
+            border: '1px solid #DDD'
+
+types.each (type) ->
+    style['div.' + type.name] =
+        backgroundColor: '#' + type.color
+
+module.exports = style

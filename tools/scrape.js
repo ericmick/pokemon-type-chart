@@ -1,8 +1,16 @@
 var pokemon = [];
+var index = 0;
 $('tr').each(function(i) {
     console.log('hi');
     var object = {type:[]};
     $td = $(this).find('td');
+    if ($td[1]) {
+        object.index = $($td[1]).html().substring(2, 5);
+    }
+    if ($td[2]) {
+        var $img = $($td[2]).find('img')
+        if ($img.length > 0) object.image = $img[0].src;
+    }
     if ($td[3]) {
         object.name = $($td[3]).find('a').html();
     }

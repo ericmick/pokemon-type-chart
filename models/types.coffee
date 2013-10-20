@@ -19,21 +19,48 @@ getEff = (type) ->
         result += toChar(multiplier)
     result
 
-module.exports = (name, type) ->
-    pokemon = []
+downloadImages = () ->
+    fs = require 'fs'
+    http = require 'http'
+    pokedex.each (pokemon) ->
+        if pokemon.image
+            http.get pokemon.image, (response) ->
+                response.pipe fs.createWriteStream 'assets/img/' + pokemon.nationalIndex + '.png'
+
+module.exports = (name, type, unique) ->
+    pokemon = [];
     if name
-        pokemon = pokedex.filter (p) -> 
-            new RegExp('^' + name + '$', 'i').test p.name
+        pokemon = pokemon.union pokedex.filter (p) -> 
+            new RegExp(name, 'i').test p.name
     if type
-        regex = new RegExp('^' + type + '$', 'i')
-        pokemon = pokedex.filter (p) ->
-            p.type.any (t) -> regex.test t
-    if pokemon
-        pokemon = pokemon.map (p) ->
-            type = p.type.map (t) ->
-                name: t.toLowerCase()
-                index: types.findIndex((x) -> x.name == t.toLowerCase())
-            name: p.name.toLowerCase(),
-            type: type,
-            eff: getEff(type)
-    {types: types, pokemon: pokemon ? []}
+        if type.has '/'
+            combo = (type.split '/').map (t) -> new RegExp '^' + t + '$', 'i'
+            pokemon = pokemon.union pokedex.filter (p) ->
+                combo.all (r) -> p.type.any (t) -> r.test t
+        else
+            regex = new RegExp('^' + type + '$', 'i')
+            pokemon = pokemon.union pokedex.filter (p) ->
+                p.type.any (t) -> regex.test t
+    if unique
+        pokemon = pokemon.unique (p) -> p.type.join '/'
+        typeGroups = {}
+        pokemon.groupBy(
+            (p) ->
+                types.findIndex (t) -> 
+                    t.name == p.type[0]?.toLowerCase()
+            , (key, group) ->
+                typeGroups[key] = group.sortBy (x) ->
+                    types.findIndex (t) ->
+                        t.name == x.type[1]?.toLowerCase()
+            )
+        pokemon = Object.values(typeGroups).flatten()
+    pokemon = pokemon.map (p) ->
+        type = p.type.map (t) ->
+            name: t.toLowerCase()
+            index: types.findIndex((x) -> x.name == t.toLowerCase())
+        name: p.name.toLowerCase(),
+        type: type,
+        eff: getEff(type)
+        image: !!p.image
+        index: p.index
+    {types: types, pokemon: pokemon}
