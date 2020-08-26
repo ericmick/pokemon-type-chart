@@ -1,3 +1,9 @@
 pokemon-type-chart
 ==================
-http://pokemon.aws.af.cm
+
+# Warning: dependencies are out of date and have security vulnerabilities. Run at your own risk. #
+
+```
+npm install
+npm start
+```
