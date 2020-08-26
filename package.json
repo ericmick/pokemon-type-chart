@@ -1,16 +1,17 @@
 {
-    "name": "coffeescript-overdose",
+    "name": "pokemon-type-chart",
     "version": "0.0.1",
     "dependencies": {
+        "ccss": "0.1.x",
+        "coffeecup": "0.3.x",
+        "coffee-script": "1.6.x",
+        "connect-assets": "2.5.x",
         "express": "3.x.x",
-        "coffee-script": "latest",
-        "connect-assets": "latest",
-        "coffeecup": "latest",
-        "less": "latest",
-        "ccss": "latest",
-        "sugar": "latest"
+        "less": "1.5.x",
+        "nvm": "0.0.4",
+        "sugar": "1.4.x"
     },
     "engines": {
-        "node": "0.x.x"
+        "node": "0.10.x"
     }
 }
