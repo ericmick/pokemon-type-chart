@@ -7,7 +7,7 @@
         "coffee-script": "1.6.x",
         "connect-assets": "2.5.x",
         "express": "3.x.x",
-        "less": "1.5.x",
+        "less": "4.1.x",
         "nvm": "0.0.4",
         "sugar": "1.4.x"
     },
